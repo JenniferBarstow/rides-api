@@ -2,6 +2,51 @@ class Ride < ApplicationRecord
   belongs_to :driver, optional: true
   validates_presence_of :start_address, :destination_address
 
+  def score(driver)
+    ride_earnings(driver) / (commute_duration(driver) + ride_duration(driver))
+  end
+
+  def ride_earnings(driver)
+    @ride_earnings ||= begin
+      base_earnings = 12
+      mileage_pay = (ride_distance(driver) - 5) * 1.5
+      time_pay = (ride_duration(driver) - 15) * 0.7
+      [base_earnings + mileage_pay + time_pay, 0].max
+    end
+  end
+
+  def commute_distance(driver)
+    @commute_distance ||= begin
+      origin = driver.home_address
+      destination = start_address
+      get_directions(origin, destination, driver)["distance"]["value"] / 1609.344
+    end
+  end
+
+  def commute_duration(driver)
+    @commute_duration ||= begin
+      origin = driver.home_address
+      destination = start_address
+      get_directions(origin, destination, driver)["duration"]["value"] / 3600.0
+    end
+  end
+
+  def ride_distance(driver)
+    @ride_distance ||= begin
+      origin = start_address
+      destination = destination_address
+      get_directions(origin, destination, driver)["distance"]["value"] / 1609.344
+    end
+  end
+
+  def ride_duration(driver)
+    @ride_duration ||= begin
+      origin = start_address
+      destination = destination_address
+      get_directions(origin, destination, driver)["duration"]["value"] / 3600.0
+    end
+  end
+
   private
 
   def get_directions(origin, destination, driver)
