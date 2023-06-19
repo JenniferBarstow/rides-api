@@ -7,7 +7,7 @@ This Rails API is built to mimic a scheduled ride service and not an on-demand r
 
 
 ### Versions
-- Ruby 3. 0. 2
+- Ruby 3. 2. 2
 - Rails 7. 0. 4. 3
 
 
@@ -138,6 +138,9 @@ This endpoint uses the following:
 
 ### Database Information
 - Rides start out not being associated with a Ride. If given more time, I would add the functionality for a driver to "pick" or "add" rides to their queue. You do, however, have the abililty to associate a Ride with a Driver in the Rails console by adding the associated `driver_id` value to an instance of a Ride.
+
+### Future Considerations
+- I would dry up any duplication in the RideCalculator, add a RideSerializer, add ability and enpoint for a driver to select a ride and one for them to view their selected/scheduled upcoming rides. I would also add additional error handling and see if the need for Sidekiq was needed for anything intensive that I could delegate to background jobs. Authentication would obviously be added if this were a real service. The main focus was on scoring the rides propery in Ride Calculator and reducing extra/duplicate calls in the Directions service.
   
 
 
