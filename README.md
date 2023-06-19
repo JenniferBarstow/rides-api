@@ -3,7 +3,8 @@
 
 ### Description
 
-This endpoint returns a list of rides that are available for a driver to accept. They are sorted by score, in descending order.
+This Rails API is built to mimic a scheduled ride service and not an on-demand ride service. In this app for drivers, I show them a list of upcoming rides so they can eventually pick the ones they want. The goal with this endpoint is to show the best rides for each driver, so to that end I have an internal scoring system. This endpoint returns a list of rides that are available for a driver to accept. They are sorted by score, in descending order. Google Direction Service API is utilized for this app in order to get the directions and distances from the origin location of the driver to the starting and ending locations of the available rides
+
 
 ### Versions
 - Ruby 3. 0. 2
@@ -82,7 +83,10 @@ None required.
 ### Setup
 
 - Database creation
-`rake db:create db:migrate db:seed`
+`rake db:create` to create the database
+`rake db:migrate` to run the migrations
+`rake db:seed` to seed the database with Driver data and Ride data
+
 
 - How to run the test suite
 `rspec spec`
@@ -130,6 +134,11 @@ This endpoint uses the following:
 - `RideCalculator` class to calculate the score of each ride, which determines the order in which they are returned. The score is based on the earnings, commute distance, and ride distance of the ride.
 
 - `DirectionsService` class to calculate the distance and duration of each ride by calling`Google Directions API`
+
+
+### Database Information
+- Rides start out not being associated with a Ride. If given more time, I would add the functionality for a driver to "pick" or "add" rides to their queue. You do, however, have the abililty to associate a Ride with a Driver in the Rails console by adding the associated `driver_id` value to an instance of a Ride.
+  
 
 
 
